@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: <Widget>[
+        //Page "Accueil"
         ListView(
           children: [
             Image.network(
@@ -104,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+        // Page "page suivante"
         Container(
           color: Colors.green,
           alignment: Alignment.center,
@@ -128,14 +130,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
+        // Page "Parametre"
         Container(
           color: Colors.blue,
           alignment: Alignment.center,
-          child: Align(
-            child: const Text('Paramètre'),
-          ),
+          child: const Text('Paramètre'),
         )
       ][currentPageIndex],
+      // Boutton Incrémentation
       floatingActionButton: Stack(
         children: <Widget>[
           Padding(
@@ -167,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      // Menu
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
