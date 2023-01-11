@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'widget.dart';
+import 'debox.dart';
+import 'my_flutter_app_icons.dart';
+import 'package:dice_icons/dice_icons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,9 +46,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int _counter = 1;
   int currentPageIndex = 0;
-  int _nbRandom = 0;
+  int _nbRandom1 = 1;
+  int _nbRandom2 = 1;
+  int _reponse = 0;
+  List<int> _liste = [];
 
   void _incrementCounter() {
     setState(() {
@@ -60,18 +67,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _resetCounter() {
     setState(() {
-      _counter = 0;
+      _counter = 1;
     });
   }
 
   void _nbAleatoire() {
     setState(() {
       if (_counter != 0) {
-        _nbRandom = Random().nextInt(_counter + 1);
+        _nbRandom1 = Random().nextInt(_counter + 1);
+        _nbRandom2 = Random().nextInt(_counter + 1);
       } else {
-        _nbRandom = 0;
+        _nbRandom1 = 1;
+        _nbRandom2 = 1;
       }
     });
+  }
+
+  void _verification() {
+    if (_reponse == _nbRandom1 + _nbRandom2) {
+      _showToast(context, "Bonne réponse");
+    } else {
+      _showToast(context, "Mauvaise réponse");
+    }
+  }
+
+  void _showToast(BuildContext context, String _message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(_message),
+      ),
+    );
+  }
+
+  void _creerliste() {
+    int nb = 0;
+    for (var i in nb) {
+      _liste.add(i);
+      i++;
+    }
   }
 
   @override
@@ -114,20 +148,45 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                '$_nbRandom1 + $_nbRandom2',
+                style: Theme.of(context).textTheme.headline4,
+                textAlign: TextAlign.center,
+              ),
               ElevatedButton(
                   onPressed: _nbAleatoire,
-                  child: Text('Générer un nombre aléatoire'),
+                  child: Text('Générer un calcul'),
                   style: ButtonStyle(
                     foregroundColor:
                         MaterialStateProperty.all<Color>(Colors.white),
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blueGrey),
                   )),
-              Text(
-                '$_nbRandom',
-                style: Theme.of(context).textTheme.headline4,
-                textAlign: TextAlign.center,
+              TextField(
+                onChanged: (value) {
+                  _reponse = int.parse(value);
+                },
+                keyboardType: TextInputType.number,
+                maxLength: 3,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: const InputDecoration(
+                    labelText: 'Entrer la solution',
+                    hintText: 'Entrer un nombre',
+                    border: OutlineInputBorder()),
               ),
+              ElevatedButton(
+                  onPressed: _verification,
+                  child: Text('Valider'),
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blueGrey),
+                  )),
             ],
           ),
         ),
@@ -224,8 +283,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Page suivante',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.settings),
-            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(DiceIcons.dice1),
+            icon: Icon(DiceIcons.dice6),
             label: 'parametres',
           ),
         ],
