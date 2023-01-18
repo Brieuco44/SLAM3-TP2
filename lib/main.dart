@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'debox.dart';
@@ -51,7 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _nbRandom1 = 1;
   int _nbRandom2 = 1;
   int _reponse = 0;
-  List<int> _liste = [];
+  bool _generationList = false;
+  String _valueDropDown = '1';
+  List<String> _liste = <String>[];
 
   void _incrementCounter() {
     setState(() {
@@ -100,12 +100,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _creerliste() {
-    int nb = 0;
-    for (var i in nb) {
-      _liste.add(i);
-      i++;
+  List<String> creerliste() {
+    if (!_generationList) {
+      for (var i = 1; i <= 20; i++) {
+        setState(() {
+          _liste.add(i.toString());
+        });
+      }
+      _generationList = true;
     }
+    return _liste;
   }
 
   @override
@@ -144,10 +148,31 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
           color: Colors.green,
           alignment: Alignment.center,
-          //child: const Text('Page suivante'),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              DropdownButton(
+                icon: Icon(DiceIcons.dice5),
+                iconSize: 30,
+                style: TextStyle(color: Colors.black),
+                underline: Container(
+                  height: 2,
+                  color: Colors.yellow,
+                ),
+                value: _valueDropDown.toString(),
+                items:
+                    creerliste().map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (valeur) {
+                  setState(() {
+                    _valueDropDown = valeur!;
+                  });
+                },
+              ),
               Text(
                 '$_nbRandom1 + $_nbRandom2',
                 style: Theme.of(context).textTheme.headline4,
